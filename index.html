@@ -12,7 +12,6 @@
 
 </head>
 
-
 <body style="margin : 0px; overflow: hidden;">
     <a-scene embedded
         arjs="sourceType: webcam; detectionMode: mono_and_matrix; matrixCodeType: 3x3; trackingMethod: best ; changeMatrixMode: modelViewMatrix;"
@@ -20,6 +19,10 @@
         renderer="sortObjects: true; antialias: true; colorManagement: true; physicallyCorrectLights; logarithmicDepthBuffer: true;"
         smooth=" true" smoothCount="5" smoothTolerance=".05" smoothThreshold="5" sourceWidth="800" sourceHeight="600"
         displayWidth="1280" displayHeight="720">
+
+        <a-assets>
+            <audio id="audiofeur" src="./Heartbeat, Heartbreak.mp3"></audio>
+        </a-assets>
 
         <a-marker type='barcode' value='0'>
             <a-text value="hi, this is my world !" side="double" position="0 0 -2" rotation="270 0 0" width="8" color="yellow"
@@ -29,7 +32,12 @@
                 src="./planet.glb"
                 position="0 0 0"
                 rotation="0 0 0"
-                scale="1 1 1">
+                scale="1 1 1"
+                animation ="property: rotation; 
+                to: 0 360 0; 
+                dur: 5000; 
+                easing: linear; 
+                loop: true">
             </a-gltf-model>
         </a-marker>
 
@@ -38,3 +46,33 @@
     </a-scene>
 </body>
 </html>
+
+
+<script>
+    const marker = document.querySelector('a-marker');
+    const audio = document.querySelector('#audiofeur');
+    const planet = document.querySelector('#planet');
+
+    marker.addEventListener('markerFound', () => {
+
+        audio.currentTime = Math.random() * audio.duration;
+        audio.play();
+
+    });
+
+    marker.addEventListener('markerLost', () => {
+
+        audio.pause();
+        audio.currentTime = 0;
+
+    });
+
+     
+    planet.addEventListener('click', () => {
+
+        planet.setAttribute('scale', '2 2 2');
+
+    });
+
+</script>
+
